@@ -182,27 +182,16 @@ namespace MyLeftClicker {
             if ((hookData.flags & ExtraInfo.LLKHF_EXTENDED) == ExtraInfo.LLKHF_EXTENDED) {
                 goto ExitProc;
             }
-            if (KeyStroke.KeyDown == msg && scanCode == KeySet.ControlL[KeySetIndex.ScanCode]) {
+            if (KeyStroke.KeyDown == msg && scanCode == KeySet.F12[KeySetIndex.ScanCode]) {
                 _timer.Enabled = !_timer.Enabled;
+                return (IntPtr)1;
             }
 
             ExitProc:
             return NativeMethods.CallNextHookEx(_keyEventHandle, code, msg, ref hookData);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keyList"></param>
-        private static void SendKey(List<KeyData> keyList) {
-            foreach (var key in keyList) {
-                NativeMethods.keybd_event(
-                    key.KeySet[KeySetIndex.VirtualKey], key.KeySet[KeySetIndex.ScanCode], key.Flag, (UIntPtr)ExtraInfo.SendKey);
-            }
-        }
-
         private static void Timer_Tick(Object sender, EventArgs e) {
-            Debug.WriteLine("tick!!!!!!");
             uint X = (uint)Cursor.Position.X;
             uint Y = (uint)Cursor.Position.Y;
             NativeMethods.mouse_event(MouseEvent.LeftDown | MouseEvent.LeftUp, X, Y, 0, 0);
